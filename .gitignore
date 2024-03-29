@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+lib/
+uploads/user_upload
+uploads/joel
+applog.txt
+security.json
+dump.rdb

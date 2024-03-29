@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>View Files</title>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <h1>View Uploaded Files</h1>
+
+    <!-- Loading Screen -->
+    {% include 'loading_screen.html' %}
+
+    <div class="center-alert">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes" style="margin-top: 15px; padding-left: 0px;">
+                    {% set last_message = messages[-1] %}
+                    <li class="security-form btn-{{ last_message[0] }}">{{ last_message[1] }}</li>
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% include 'list_uploaded_files.html' %}
+
+
+</body>
+
+</html>

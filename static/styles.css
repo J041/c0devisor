@@ -1,0 +1,793 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    /* Prevent scrolling */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #f1f1f1;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    /* Add margin to separate from the form */
+}
+
+.container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+
+
+.submit_file {
+    text-align: center;
+    margin-top: 20px;
+}
+
+form {
+    text-align: center;
+}
+
+
+
+/* Add styles for the alerts */
+.alert {
+    padding: 15px;
+    margin-top: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    display: inline-block;
+    /* Align alerts horizontally */
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+
+
+
+.left-tabs,
+.right-tabs {
+    width: 10%;
+    transition: width 0.3s ease;
+    overflow-y: auto;
+    /* Add scroll if content exceeds height */
+    height: calc(100vh - 200px);
+    /* Set maximum height to 10px less than viewport height */
+}
+
+.left-tabs.collapsed,
+.right-tabs.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+.middle-tabs object {
+    width: 100%;
+    max-height: calc(100vh - 200px);
+}
+
+.tab {
+    padding: 10px;
+    margin: 0;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    /* Background color for non-active buttons */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 10px;
+}
+
+.tab:hover {
+    background-color: #e0e0e0;
+    /* Hover color for non-active buttons */
+}
+
+.active-tab {
+    background-color: #4CAF50;
+    /* Active button background color */
+    color: #fff;
+    /* Active button text color */
+}
+
+.active-tab:hover {
+    color: black;
+}
+
+/* Additional styles for buttons */
+.tab-container {
+    display: flex;
+    gap: 10px;
+    /* Adjust the gap between buttons */
+}
+
+.tab-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+}
+
+.left-tabs,
+.middle-tabs,
+.right-tabs {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #f1f1f1;
+}
+
+.tab {
+    text-decoration: none;
+    padding: 10px;
+    margin: 2px;
+    color: #333;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: #ccc;
+}
+
+.active-tab {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.left-tabs,
+.right-tabs {
+    width: 15%;
+    transition: width 0.3s ease;
+    /* Add transition for smooth animation */
+}
+
+.left-tabs.collapsed,
+.right-tabs.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+/* Apply styles when the div has the 'active' class */
+.left-tabs div.active {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f107;
+}
+
+.left-tabs div.active > div > p, a{
+    display: block;
+}
+
+.collapsible-filetab:has(~ a.active-tab){
+    display: block;
+}
+.collapsible-filetab:has(~ div  a.active-tab) {
+    display: block;
+}
+
+/* Apply styles to anchor tags inside divs that don't have the 'active' class */
+.left-tabs div:not(.active) a,p {
+    display: none;
+}
+
+
+.middle-tabs {
+    width: 70%;
+    /* Set an initial width for the middle tab container */
+    transition: width 0.3s ease;
+    /* Add transition for smooth animation */
+    flex-direction: initial;
+}
+
+.right-tabs {
+    display: block;
+}
+
+
+
+
+/* Legends Card */
+.legends-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Legends */
+.legends {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Individual Legend */
+.legend {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+
+/* Colored Circle */
+.legend-circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* Text next to the Circle */
+.legend span {
+    font-size: 14px;
+    color: #333;
+    /* Adjust the text color as needed */
+}
+
+
+
+/* Running Tasks display */
+#running-tasks-dropdown {
+    display: none;
+    list-style: none;
+    position: absolute;
+    left: 0;
+    top: 45px;
+    background-color: lightgrey;
+    padding: 10px;
+    margin-top: 15px;
+    margin-left: 20px;
+    width: 100%;
+}
+
+#running-tasks-button {
+    position: absolute;
+    left: 225px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.completed {
+    background-color: #54bf58;
+    border: 0px;
+}
+
+.failed {
+    background-color: #dc3545;
+}
+
+#running-tasks-button:hover #running-tasks-dropdown {
+    display: block;
+    z-index: 10;
+}
+
+.notification {
+    background-color: #555;
+    color: white;
+    text-decoration: none;
+    padding: 11.3px 20px;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.notification:hover {
+    background: red;
+}
+
+.notification #task-counter {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+}
+
+
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+td {
+    height: 50px;
+    background-color:  #ffffff;
+}
+
+thead {
+    background-color: #f0f0f0;
+}
+
+
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 8px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-gray {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+
+
+/* Notification pop-up */
+#alerts {
+    position: absolute;
+    top: -20;
+    right: 0;
+    z-index: 12;
+    display: none;
+    max-width: 350px;
+    overflow: hidden;
+    font-size: .875rem;
+    /* background-color: rgba(255, 255, 255, .85); */
+    background-clip: padding-box;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    /* opacity: 0; */
+    border-radius: .25rem
+}
+
+.alert-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: 10px;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, .85);
+    background-clip: padding-box;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    border-radius: 5px;
+}
+
+.alert-body {
+    padding: .75rem;
+    padding-left: 0px;
+}
+
+
+
+/* Alerts within table */
+.alert {
+    margin: 15px;
+}
+
+/* Responsive table */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Center-aligned flashed messages */
+.center-alert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+ul {
+    margin-top: 0px;
+}
+
+#regenerate-button {
+    max-width: 15px;
+    max-height: 15px;
+    z-index: 5;
+    position: absolute;
+}
+
+iframe {
+    width: 100%;
+    height: 100vh;
+    border: none;
+}
+
+/* Button Wrap Word */
+.wrap-word {
+    word-wrap: break-word;
+}
+
+
+
+.toggle-button {
+    position: absolute;
+    background-color: lightgray;
+    color: black;
+    top: 105px;
+}
+
+.view_svg {
+    right: 200px;
+    padding: 9px 20px;
+    margin-top: 5px;
+    text-decoration: none;
+    background-color: darkgreen;
+    color: white;
+}
+
+.go-back {
+    position: absolute;
+    left: 120px;
+}
+
+/* Add some styling to the form */
+.security-form {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/* Style the labels */
+.security-form label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+    font-weight: bold;
+
+}
+
+/* Style the input fields */
+.security-form input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Add some spacing for better readability */
+.security-form h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin-left: 3px;
+}
+
+/* Style the submit button */
+.security-form button {
+    width: 100%;
+    /* Ensure the button takes up the full width */
+    box-sizing: border-box;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.security-form button:hover {
+    background-color: lightgray;
+    color: black;
+}
+
+/* Style tooltips within security form */
+.tooltip {
+    padding: 0px 1px;
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip-info {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 1.5em;
+    font-size: 0.7em;
+    padding: 1px 5px;
+    display: none;
+    color: white;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 4px;
+    transition: opacity 0.1s ease-out;
+    z-index: 99;
+    text-align: center;
+}
+
+.tooltip:hover::before {
+    display: inline-block;
+}
+
+object {
+    background-color: white;
+}
+
+.table-container {
+    max-height: 80vh;
+    /* Set a maximum height */
+    overflow-y: auto;
+    /* Add vertical scrollbar if needed */
+}
+
+#functionSearch {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    /* Ensure padding and border are included in the width */
+}
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+/* collapsible button for right sidebar  */
+.collapsible {
+    background-color: #355e3b;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 18px;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.active {
+    background-color: #4CAF50;
+    color: white;
+    width: 100%;
+}
+
+.collapsible:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    color: white;
+}
+
+.content {
+    max-height: 0;
+    overflow: clip;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+}
+
+.collapsible-filetab {
+    background-color: #355e3b;
+    color: white;
+    align-items: center
+}
+
+.collapsible-filetab:hover {
+    color: black;
+}
+
+.collapsible-filetab:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+/* end collapsible buttons */
+
+
+
+.button-row {
+    display: flex;
+}
+
+.button-row form,
+.button-row div {
+    margin-right: 10px;
+}
+
+
+
+
+.close {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    background-color: transparent;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+    padding: .75rem 1.25rem;
+    margin-left: auto;
+}
+
+
+
+.collapsible-filetab.tab {
+    --random-color: {{ random_color }};
+    background-color: var(--random-color);
+}
+
+
+.collapsible-filetab {
+    position: relative; /* Ensure proper positioning for absolutely positioned children */
+}
+
+.collapsible-filetab:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    position: absolute; /* Position the pseudo-element relative to its closest positioned ancestor */
+    top: 50%; /* Position from the top */
+    transform: translateY(-50%); /* Translate the element up by half of its height */
+    right: 0;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+
+.label-name {
+    font-size: 13px;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Graph: {{filename}}</title>
+    <script src="{{ url_for('static', filename='svg-pan-zoom.min.js') }}"></script>
+</head>
+<body style="overflow: hidden; background-color: lightgray;">
+    <object id="svgFrame" data="{{ html_file_path }}" type="image/svg+xml" style="background-color: white; width: 100%;"></object>
+    
+    <button onclick="resetPanZoom()" style="position: fixed; top: 10px; right: 10px;">Toggle/Reset Pan/Zoom</button>
+    
+    <script>
+        // Function to apply SVG Pan Zoom to the SVG document
+        function applySvgPanZoom() {
+            // Access the SVG document inside the <iframe>
+            var svgFrame = document.getElementById("svgFrame");
+            var svgDoc = svgFrame.contentDocument;
+
+            // Check if SVG document is loaded
+            if (svgDoc) {
+                // Apply SVG Pan Zoom to the SVG document
+                var svgElement = svgDoc.querySelector("svg");
+                if (svgElement) {
+                    svgPanZoom(svgElement, {
+                        zoomEnabled: true,
+                        controlIconsEnabled: true,
+                        // You can add more options as needed
+                    });
+                }
+            }
+        }
+
+        // Function to reset pan and zoom
+        function resetPanZoom() {
+            // Access the SVG document inside the <iframe>
+            var svgFrame = document.getElementById("svgFrame");
+            var svgDoc = svgFrame.contentDocument;
+
+            // Check if SVG document is loaded
+            if (svgDoc) {
+                // Apply SVG Pan Zoom to the SVG document
+                var svgElement = svgDoc.querySelector("svg");
+                if (svgElement) {
+                    // Get the SVG Pan Zoom instance
+                    var panZoomInstance = svgPanZoom(svgElement);
+
+                    // Reset pan and zoom
+                    panZoomInstance.resetZoom();
+                    panZoomInstance.resetPan();
+                }
+            }
+        }
+
+        // Wait for the DOM to be fully loaded before applying SVG Pan Zoom
+        document.addEventListener("DOMContentLoaded", applySvgPanZoom);
+    </script>
+</body>
+</html>

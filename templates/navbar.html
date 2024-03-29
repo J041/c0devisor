@@ -1,0 +1,34 @@
+<!-- navbar.html -->
+<div class="header">
+    <button onclick="window.location.href='{{ url_for('index') }}'">Home</button>
+
+    <button onclick="history.back()" class="go-back">Go Back</button>
+
+    <div id="running-tasks-button">
+        <a href="#" class="notification">
+            <span title="List of file(s) still being processed">Processing</span>
+            <span id="task-counter"></span>
+        </a>
+
+        <ul id="running-tasks-dropdown">
+            <!-- New tasks being processed goes here -->
+        </ul>
+    </div>
+
+    <button onclick="window.location.href='{{ url_for('view_files') }}'">
+        View Files
+    </button>
+</div>
+<div id="alerts"></div>
+<!-- Include JavaScript file -->
+<script src="{{ url_for('static', filename='navbar.js') }}"></script>
+
+<script>
+    // JavaScript to hide/show ul based on content
+    window.addEventListener('DOMContentLoaded', function() {
+        var ul = document.getElementById('running-tasks-dropdown');
+        if (ul && ul.children.length === 0) {
+            ul.style.display = 'none'; // Hide the ul if it has no children
+        }
+    });
+</script>

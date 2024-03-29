@@ -1,0 +1,183 @@
+<style>
+
+/* Color for clicked state */
+.btn-clicked {
+    background-color: #28a745; /* Green color */
+}
+</style>
+
+<div class="table-responsive table-container">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Filename</th>
+                <th>Visualize</th>
+                <th>Additional Actions</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="completed_uploads">
+            {% for file in uploaded_files %}
+            {% set row_number = loop.index %}
+            <tr>
+                <td><b>{{ row_number }}</b></td>
+                <td>{{ file }}</td>
+                <td>
+                    <a href="{{ url_for('view_graph', filename=file) }}" class="btn btn-primary" role="button">View
+                        Graph</a>
+                </td>
+                <td>
+                    <!-- Trigger/Open The Modal -->
+                    <a class="btn btn-gray" role="button" id="myBtn" onclick="open_btn(`{{file}}`)">
+                        Resubmit </a>
+                    <!-- The Modal -->
+                </td>
+                <td>
+                    <a href="{{ url_for('delete_file', filename=file) }}" class="btn btn-danger"
+                        role="button">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tbody id="fileTableBody">
+            <!-- Uploaded files and pending tasks will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<div id="myModal" class="modal"></div>
+<script>
+    // Function to handle button click and change color
+    function changeButtonColor(element) {
+        element.classList.add('btn-clicked'); // Add the 'btn-clicked' class to the clicked button
+    }
+
+    // Attach click event listeners to the buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function() {
+            changeButtonColor(this); // Call the function to change the color when clicked
+        });
+    });
+
+    // Function to add rows for pending tasks
+    // If key is provided, add a new row to table
+    function addPendingTasksToTable(key) {
+        const pending_tasks = JSON.parse(window.localStorage.getItem("pendingTasks"));
+        const tableBody = document.getElementById('fileTableBody');
+        if (pending_tasks && !key) {
+            let index = 1;
+            for (const [key, task] of Object.entries(pending_tasks)) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><b>--</b></td>
+                    <td>${task}</td>
+                    <td>Processing</td>
+                    <td></td>
+                    <td></td>
+                `;
+                newRow.id = `row-${key}`;
+                tableBody.appendChild(newRow);
+                index++;
+            }
+        }
+        else if (pending_tasks && Object.keys(pending_tasks).indexOf(key)!= -1) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><b>--</b></td>
+                <td>${pending_tasks[key]}</td>
+                <td>Processing...</td>
+                <td></td>
+                <td></td>
+            `;
+            newRow.id = `row-${key}`;
+            tableBody.appendChild(newRow);
+        }
+    }
+    function updateCompletedTaskInTable(key, newfolder) {
+        const tableBody = document.getElementById('fileTableBody');
+        let completed_task = tableBody.querySelector(`#row-${key}`);
+        if (newfolder) {
+            let completed_table = document.getElementById("completed_uploads");
+            if (newfolder["index"] < completed_table.length) {
+                return
+            };
+            let new_row = document.createElement('tr');
+            new_row.innerHTML = `<td><b>${newfolder["index"]}</b></td>
+            <td>${newfolder["new"]}</td>
+            <td><a href="/view_graph/${newfolder["new"]}" class="btn btn-primary" role="button">View Graph</a></td>
+            <td><a class="btn btn-gray" role="button" onclick="open_btn("${newfolder["new"]}")">Resubmit </a></td>
+            <td><a href="/delete_file/${newfolder["new"]}" class="btn btn-danger" role="button">Delete</a></td>`
+            completed_table.appendChild(new_row);
+        }
+        completed_task.remove();
+    }
+    // Call the function to add pending tasks when the page loads
+    addPendingTasksToTable();
+
+    const open_btn = (filename) => {
+        var modal = document.getElementById("myModal");
+        modal.style.display = 'block';
+        modal.innerHTML = `
+    <div style='height:100px;width:200px;'></div>
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1>Reupload Example</h1>
+        <form action="/resubmit/${filename}" class="submit_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="rfile" accept=".zip, .php, .html">
+            <button type="button" onclick="async_post('resubmit/${filename}', 'rfile')">Upload</button>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+    </div>
+    
+    `;
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function () {
+            modal.style.display = 'none';
+        }
+    }
+    var modal = document.getElementById("myModal");
+
+    
+    // Check if styles is loaded 
+    if (document.styleSheets.length == 0) {
+        var cssLink = document.createElement("link");
+            cssLink.rel = "stylesheet"; 
+            cssLink.type = "text/css"; 
+            cssLink.href = "/static/styles.css"; 
+        document.getElementsByTagName("head")[0].appendChild(cssLink);
+    }
+    else {
+        for (var i = 0; i < document.styleSheets.length; i++) {
+            if (document.styleSheets[i].href && document.styleSheets[i].href.match("/template.css")) {
+                if (document.styleSheets[i].cssRules.length == 0) {
+                    //not loaded
+                    break;
+                }
+            }
+        }
+    }
+    // Refresh page on back or forward button
+    window.onpageshow = function(event) {
+		if (event.persisted || 
+            (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) {
+			window.location.href = window.location.href;
+		}
+	};
+</script>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>File Upload</title>
+
+    <style>
+        /* Add border around the drag-and-drop area */
+        #file-label {
+            border: 3px dashed #808080;
+            background-color: #fff;
+            padding: 80px;
+            /* Increase padding to make the box bigger */
+            width: 800px;
+            /* Increase width to make the box bigger */
+            text-align: center;
+            margin: 0 auto;
+            /* Center the element horizontally */
+            transition: border-color 0.3s ease-in-out,
+                background-color 0.3s ease-in-out;
+            /* Add animation to border and background color */
+            animation-name: shake;
+            animation-duration: 0.5s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+
+        /* Add hover effect */
+        #file-label:hover {
+            background-color: #a5a5a5;
+            color: white;
+        }
+
+        /* Add animation on drop */
+        #file-label.dragover {
+            background-color: #a5a5a5;
+            color: white;
+        }
+
+        /* Animation keyframes */
+        @keyframes shake {
+            0% {
+                transform: translateX(-10px);
+            }
+
+            25% {
+                transform: translateX(10px);
+            }
+
+            50% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .section-divider {
+            background-color: #f1f1f1;
+            padding: 20px 0;
+            margin: 50px;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Add shadow for depth */
+        }
+    </style>
+</head>
+
+<body style="overflow: auto;">
+    {% include 'navbar.html' %}
+
+    <div class="section-divider">
+        <h1>File Upload Example</h1>
+
+        <!-- Loading Screen -->
+        {% include 'loading_screen.html' %}
+
+        <form action="/upload" class="submit_file" method="post" enctype="multipart/form-data"
+            ondragover="dragOver(event)" ondrop="drop(event)">
+            <div style="width: 100%; box-sizing: border-box;">
+                <input type="file" name="file" id="file" accept=".zip, .php, .html" style="display: none; width: 100%;"
+                    onchange="fileSelected(this)" />
+                <label for="file" id="file-label" style="cursor: pointer; display: block; text-align: center;
+                                                         padding: 100px;
+                                                         border-radius: 5px; border: 3px dashed #aaa; width: auto;">
+                    Drag & drop files here or click to select
+                </label>
+
+                <br />
+
+                <button type="button" id="yes" onclick="async_post()" title="Upload" style="margin-top: 20px;
+                                                                                  background-color: #4caf50;
+                                                                                  color: #fff;
+                                                                                  border: none;
+                                                                                  padding: 10px 20px;
+                                                                                  border-radius: 5px;
+                                                                                  cursor: pointer; width: 100%;">
+                    <i class="fa-solid fa-upload"></i> Upload
+                </button>
+            </div>
+
+
+            <!-- Flash message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul class="flashes" style="margin-top: 15px; padding-left: 0px; width: 100%;">
+                {% for category, message in messages %}
+                <li id="index-flash" class="security-form btn-{{ category }}" style="list-style: none;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </form>
+    </div>
+
+
+    <div class="section-divider">
+        <h1>View Uploaded Files</h1>
+        <!-- <iframe src="/uploaded_files" id="uploaded_files"></iframe> -->
+        {% include "list_uploaded_files.html" %}
+    </div>
+</body>
+
+<script>
+    function dragOver(event) {
+        event.preventDefault();
+        const fileLabel = document.getElementById("file-label");
+        fileLabel.classList.add("dragover"); // Apply dragover class
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const fileInput = document.getElementById("file");
+        const files = event.dataTransfer.files;
+        fileInput.files = files;
+        const fileLabel = document.getElementById("file-label");
+        if (files.length === 1) {
+            fileLabel.textContent = files[0].name;
+        } else {
+            fileLabel.textContent = files.length + " files selected";
+        }
+        fileLabel.classList.remove("dragover"); // Remove dragover class
+    }
+
+    function fileSelected(input) {
+        const fileLabel = document.getElementById("file-label");
+        if (input.files.length === 1) {
+            fileLabel.textContent = input.files[0].name;
+        } else {
+            fileLabel.textContent = input.files.length + " files selected";
+        }
+    }
+
+</script>
+
+</html>
